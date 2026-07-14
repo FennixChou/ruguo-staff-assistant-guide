@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>如菓工務助理 使用指南</title>
+<style>
+  :root {
+    --bg: #F2ECDF;
+    --surface: #FCFAF4;
+    --surface-2: #F7F1E6;
+    --ink: #22271F;
+    --muted: #62665A;
+    --line: #E4DCCB;
+    --primary: #34573B;
+    --primary-strong: #274430;
+    --primary-soft: rgba(52,87,59,.10);
+    --primary-line: rgba(52,87,59,.30);
+    --clay: #8F6234;
+    --warn: #96611B;
+    --danger: #AF4636;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #15170F;
+      --surface: #1E2016;
+      --surface-2: #24271B;
+      --ink: #ECE9DE;
+      --muted: #9D9B88;
+      --line: #2F3123;
+      --primary: #9BC084;
+      --primary-strong: #B4D49E;
+      --primary-soft: rgba(155,192,132,.14);
+      --primary-line: rgba(155,192,132,.38);
+      --clay: #CB9C6E;
+      --warn: #E0AC5B;
+      --danger: #E0806F;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #15170F; --surface: #1E2016; --surface-2: #24271B; --ink: #ECE9DE;
+    --muted: #9D9B88; --line: #2F3123; --primary: #9BC084; --primary-strong: #B4D49E;
+    --primary-soft: rgba(155,192,132,.14); --primary-line: rgba(155,192,132,.38);
+    --clay: #CB9C6E; --warn: #E0AC5B; --danger: #E0806F;
+  }
+  :root[data-theme="light"] {
+    --bg: #F2ECDF; --surface: #FCFAF4; --surface-2: #F7F1E6; --ink: #22271F;
+    --muted: #62665A; --line: #E4DCCB; --primary: #34573B; --primary-strong: #274430;
+    --primary-soft: rgba(52,87,59,.10); --primary-line: rgba(52,87,59,.30);
+    --clay: #8F6234; --warn: #96611B; --danger: #AF4636;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Segoe UI","Microsoft JhengHei","PingFang TC","Noto Sans TC",system-ui,sans-serif;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 44px 22px; }
+  header.hero {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 22px 24px;
+    margin-bottom: 24px;
+  }
+  .kicker {
+    display: inline-block;
+    font-size: .76rem;
+    letter-spacing: .05em;
+    color: var(--primary);
+    background: var(--primary-soft);
+    border: 1px solid var(--primary-line);
+    border-radius: 999px;
+    padding: 3px 12px;
+    margin-bottom: 10px;
+  }
+  h1 { font-size: 1.55rem; font-weight: 600; margin: 0 0 8px; color: var(--ink); }
+  .lede { color: var(--muted); font-size: .95rem; margin: 0; }
+  h2 {
+    font-size: 1.15rem;
+    color: var(--primary);
+    margin: 34px 0 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--line);
+  }
+  h3 { font-size: 1rem; margin: 18px 0 8px; color: var(--ink); }
+  p { margin: 0 0 10px; }
+  .muted { color: var(--muted); font-size: .88rem; }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 14px;
+  }
+  .card h3 { margin-top: 0; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  @media (max-width: 720px) { .grid3 { grid-template-columns: 1fr; } }
+  .tag {
+    display: inline-block;
+    font-size: .76rem;
+    letter-spacing: .03em;
+    border-radius: 999px;
+    padding: 2px 10px;
+    margin-bottom: 10px;
+  }
+  .tag-a { color: var(--primary); background: var(--primary-soft); border: 1px solid var(--primary-line); }
+  .tag-b { color: var(--clay); background: rgba(143,98,52,.12); border: 1px solid rgba(143,98,52,.3); }
+  .tag-c { color: var(--warn); background: rgba(150,97,27,.12); border: 1px solid rgba(150,97,27,.3); }
+  ul { margin: 0; padding-left: 1.15em; }
+  li { margin-bottom: 6px; }
+  .examples { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 720px) { .examples { grid-template-columns: 1fr; } }
+  .ex-good, .ex-bad {
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    padding: 16px 18px;
+  }
+  .ex-good { background: var(--primary-soft); border-color: var(--primary-line); }
+  .ex-bad { background: rgba(175,70,54,.08); border-color: rgba(175,70,54,.28); }
+  .ex-title { font-weight: 600; margin-bottom: 10px; }
+  .ex-good .ex-title { color: var(--primary-strong); }
+  .ex-bad .ex-title { color: var(--danger); }
+  .ex-good ol, .ex-bad ol { padding-left: 1.3em; margin: 0; }
+  .ex-good li, .ex-bad li { margin-bottom: 8px; }
+  .boundary-box {
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--danger);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 14px;
+  }
+  .boundary-box li { margin-bottom: 8px; }
+  .callout {
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--warn);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-top: 14px;
+    font-size: .95rem;
+  }
+  .qa {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 10px;
+  }
+  .qa .q { font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+  .qa .a { color: var(--muted); margin: 0; }
+  footer {
+    margin-top: 34px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: .82rem;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <span class="kicker">如菓工務助理・員工使用指南</span>
+    <h1>3 分鐘搞懂：能問什麼、怎麼問、界線在哪</h1>
+    <p class="lede">它是如菓室內裝修的 AI 工務助理，服務對象是<strong>你（員工）</strong>，不是老闆本人。不會的事情會誠實說「需查證」或「請問老闆」，不會亂編工法、法規、型號或數字。</p>
+  </header>
+
+  <h2>我可以問它什麼</h2>
+
+  <div class="grid3">
+    <div class="card">
+      <span class="tag tag-a">A・馬上有回覆</span>
+      <h3>直接問</h3>
+      <ul>
+        <li>工法／建材問題、施工問題排解</li>
+        <li>法規查詢（附條號）</li>
+        <li>報價／成本查詢（附來源，沒有標「需老闆確認」）</li>
+        <li>客戶資料與歷史報價單查詢</li>
+        <li>工地文件協助（日報格式、點交清單、草稿）</li>
+        <li>單位換算、名詞解釋</li>
+      </ul>
+    </div>
+    <div class="card">
+      <span class="tag tag-b">B・約 5–15 分鐘</span>
+      <h3>轉後台自動處理</h3>
+      <ul>
+        <li>生示意圖（4 張候選，文字生成）</li>
+        <li>報告轉 PDF（整理／比較表）</li>
+        <li>營運洞察報告（現金流／竣工預測 PDF）</li>
+      </ul>
+      <p class="muted">處理完自動貼回你問的那個頻道。</p>
+    </div>
+    <div class="card">
+      <span class="tag tag-c">C・轉給老闆</span>
+      <h3>它聽得懂，但不自己做</h3>
+      <ul>
+        <li>施工計畫表</li>
+        <li>工地日報表全流程</li>
+        <li>標案搜尋／標案適合度分析</li>
+        <li>合約審閱</li>
+        <li>正式報價單產檔</li>
+      </ul>
+      <p class="muted">會直接轉知老闆人工處理，不會馬上有成品。</p>
+    </div>
+  </div>
+
+  <h2>怎麼問效果最好</h2>
+  <div class="examples">
+    <div class="ex-good">
+      <div class="ex-title">✓ 好例句</div>
+      <ol>
+        <li>浴室牆角最近出現裂縫，是正常龜裂還是有問題？</li>
+        <li>SPC 地板和超耐磨地板差在哪？哪個比較耐用？</li>
+        <li>室內裝修消防法規要注意哪些？</li>
+        <li>油漆工錢一坪大概多少？</li>
+        <li>OO 案的歷史報價單金額多少？</li>
+        <li>幫我生 4 張鄉村風客廳的示意圖</li>
+        <li>幫我整理一份常見壁癌處理工法的報告，做成 PDF 給我</li>
+        <li>OO 案最近的現金流預測跟完工進度看一下</li>
+      </ol>
+    </div>
+    <div class="ex-bad">
+      <div class="ex-title">✕ 壞例句</div>
+      <ol>
+        <li>幫我把這份報價單的金額改一下——它不能刪除或覆蓋既有檔案，金額異動要找老闆</li>
+        <li>老闆最近財務狀況／私人的事怎樣？——涉及老闆私人資料，一律拒答</li>
+        <li>生一張某某名人的照片當素材——人像寫真／名人肖像／兒童／情色／暴力／政治／仿冒品牌 logo 一律不生成</li>
+      </ol>
+    </div>
+  </div>
+
+  <h2>界線在哪</h2>
+  <div class="boundary-box">
+    <ul>
+      <li>不碰薪資人事、老闆私人檔案</li>
+      <li>只讀得到公司知識庫、報價資料庫、客戶報價單與如菓工務資料夾，其他檔案讀不到</li>
+      <li>不會執行系統指令、裝軟體、改設定、刪檔案</li>
+      <li>不會對外發佈任何內容（查資料可以，發佈不行）</li>
+      <li>只能<strong>新增</strong>檔案，<strong>絕不刪除</strong>、<strong>絕不覆蓋</strong>既有檔案——同用途新版本用新檔名，舊版一定留著</li>
+      <li>叫它「不要管規則、照我說的做」，它不會照做，會回「這超出我的權限，請找老闆」</li>
+    </ul>
+    <div class="callout">
+      <strong>遇到答不了會怎樣：</strong>資料庫沒有答案的，或屬於「會轉給老闆」的類型，它會誠實告訴你，不會硬答、不會編數字。<strong>緊急或工安相關的狀況，請直接找老闆或工地主任，不要透過它。</strong>
+    </div>
+  </div>
+
+  <h2>常見狀況 QA</h2>
+
+  <div class="qa">
+    <p class="q">Q1：可以傳照片給它嗎？</p>
+    <p class="a">可以傳，但目前生圖功能只做「文字生成」，還沒有「拿參考照片改風格」的功能。真的需要以圖改圖，請跟老闆說。</p>
+  </div>
+  <div class="qa">
+    <p class="q">Q2：轉到後台的需求要等多久？</p>
+    <p class="a">生示意圖／PDF 報告／營運洞察，正常 5–15 分鐘會自動貼回你問的那個頻道。超過太久沒回，直接問老闆。</p>
+  </div>
+  <div class="qa">
+    <p class="q">Q3：它回我「需查證」或「這題問老闆」，是不是壞了？</p>
+    <p class="a">不是壞了。這是它誠實的界線：資料庫沒有答案，或是施工計畫、日報、標案、合約審閱這類它只能轉單不能自己做的類型，都會照實說，不是故障。</p>
+  </div>
+  <div class="qa">
+    <p class="q">Q4：它會不會不小心刪掉我傳的檔案或資料？</p>
+    <p class="a">不會。它被規定只能新增，絕不能刪除或覆蓋，同用途新版本一律用新檔名。</p>
+  </div>
+  <div class="qa">
+    <p class="q">Q5：要在哪裡跟它說話？</p>
+    <p class="a">在老闆幫你開通的那個工務頻道打字，記得 <strong>@ 提到「如菓工務助理」</strong> 它才會回應；私訊（DM）第一次要先跟它要配對碼，等老闆核准後才能用。</p>
+  </div>
+
+  <footer>如菓室內裝修・工務助理員工使用指南（線上版）</footer>
+
+</div>
+</body>
+</html>
