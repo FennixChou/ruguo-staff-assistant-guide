@@ -257,13 +257,13 @@
   <header class="hero">
     <span class="kicker">如菓工務助理・員工使用指南</span>
     <h1>平面圖轉 3D：操作手冊</h1>
-    <p class="lede">給<strong>員工</strong>用：把一張平面圖 CAD（電腦繪的施工圖檔）丟給如菓工務助理，後台會自動幫你在 SketchUp 拉出一個 3D 牆體模型，讓你和老闆、師傅快速看懂空間格局。全程在 Discord 完成，不用自己開任何繪圖軟體。</p>
+    <p class="lede">給<strong>員工</strong>用：把一張 <strong>AutoCAD 畫好的平面圖（.dwg 檔）</strong>丟給如菓工務助理，後台會自動幫你在 SketchUp 拉出一個 3D 牆體模型，讓你和老闆、師傅快速看懂空間格局。全程在 Discord 完成，你只要在 AutoCAD 把圖存好、傳到 Discord 就好。</p>
   </header>
 
   <div class="card quickref">
     <h3>60 秒速查</h3>
     <ol>
-      <li>準備一個平面圖 <b>CAD 檔（.dwg 或 .dxf）</b>——酷家樂帳號裡就能匯出</li>
+      <li>在 AutoCAD 把平面圖存成 <b>.dwg</b>（單位 mm、牆線放 WALL 圖層、每段牆封閉）</li>
       <li>到<b>工務頻道</b>打字：<b>@如菓工務助理</b> ＋ 你的需求，把 CAD 檔當附件夾進同一則訊息</li>
       <li>等 <b>通常 5–10 分鐘，最多 20 分鐘</b>，後台自動處理，不用一直盯著</li>
       <li>收到 <b>.skp 模型檔</b> ＋ <b>俯視圖、透視圖</b> 兩張圖，一共三個附件</li>
@@ -273,11 +273,11 @@
 
   <h2>流程總覽</h2>
   <div class="flow-wrap">
-    <svg viewBox="0 0 640 994" role="img" aria-label="流程圖：酷家樂匯出 CAD，上傳到 Discord，後台 SketchUp 自動建模，回貼 skp 與俯視圖透視圖">
+    <svg viewBox="0 0 640 994" role="img" aria-label="流程圖：AutoCAD 存出平面圖 .dwg，上傳到 Discord，後台 SketchUp 自動建模，回貼 skp 與俯視圖透視圖">
       <rect x="40" y="16" width="560" height="180" rx="12" fill="var(--surface)" stroke="var(--primary-line)" stroke-width="1.5"/>
-      <text x="320" y="64" text-anchor="middle" font-size="29" font-weight="600" fill="var(--ink)">① 酷家樂匯出平面圖 CAD</text>
-      <text x="320" y="110" text-anchor="middle" font-size="27" fill="var(--muted)">「牆體定位圖」，格式選 CAD，</text>
-      <text x="320" y="151" text-anchor="middle" font-size="27" fill="var(--muted)">得到一個 .dwg 檔</text>
+      <text x="320" y="64" text-anchor="middle" font-size="29" font-weight="600" fill="var(--ink)">① AutoCAD 存出平面圖 .dwg</text>
+      <text x="320" y="110" text-anchor="middle" font-size="27" fill="var(--muted)">單位 mm・牆線放 WALL 圖層</text>
+      <text x="320" y="151" text-anchor="middle" font-size="27" fill="var(--muted)">每段牆是封閉的框</text>
 
       <line x1="320" y1="196" x2="320" y2="234" stroke="var(--primary)" stroke-width="2.5"/>
       <polygon points="320,244 311,228 329,228" fill="var(--primary)"/>
@@ -312,7 +312,7 @@
   <div class="card">
     <h3>你需要準備三樣東西</h3>
     <ul class="prep-list">
-      <li><strong>這個案子的平面圖 CAD 檔</strong>——酷家樂帳號裡有這個案子的方案，或設計師／建築師直接給你 <strong>.dwg／.dxf</strong>（CAD 是「電腦繪的施工圖檔」的統稱，DWG 和 DXF 是這種檔案兩種常見的副檔名，助理都收）</li>
+      <li><strong>這個案子的平面圖 .dwg</strong>（你在 AutoCAD 畫的，或設計師／建築師給的，<strong>.dwg／.dxf</strong> 都可以——CAD 是「電腦繪的施工圖檔」的統稱，DWG 和 DXF 是這種檔案兩種常見的副檔名，助理都收）</li>
       <li><strong>已經被老闆加進工務頻道</strong>——如果還沒有，跟老闆說一聲</li>
       <li><strong>一台能開 Discord 的電腦或手機</strong>——整個流程都在 Discord 裡完成，不用另外開繪圖軟體</li>
     </ul>
@@ -321,29 +321,36 @@
   <h2>怎麼做：6 個步驟</h2>
 
   <div class="step-card">
-    <div class="step-head"><span class="step-badge">1</span><h3>拿到平面圖 CAD 檔</h3></div>
+    <div class="step-head"><span class="step-badge">1</span><h3>在 AutoCAD 把平面圖整理好、存成 .dwg</h3></div>
 
     <span class="step-sub-label">你要做的</span>
     <ol>
-      <li>案子在酷家樂裡已經有方案：登入酷家樂網頁版 →「我的設計」找到這個案子 →「查看詳情」</li>
-      <li>詳情頁點「更多 ▾」→「匯出」→「施工圖紙」，會另外開一個「施工圖工具」分頁</li>
-      <li>在新分頁上方點「圖紙&清單」→ 左側「圖紙清單」裡找「平面圖紙 › 牆體定位圖」</li>
-      <li>點右上角藍色「下載」→ 跳出的視窗只勾「牆體定位圖」、格式選「CAD」（本來就是預設值）→「下載」</li>
-      <li>瀏覽器下載資料夾會多一個 zip，解壓縮後裡面那個 <strong>.dwg</strong> 檔就是你要的</li>
+      <li>檢查單位：整張圖要用 <strong>mm</strong> 畫（1 個圖面單位＝1 mm）。如果這張圖原本是用 cm 畫的，先用 <strong>SCALE</strong> 指令把整張圖放大 10 倍，另存一份再用，不然模型會縮成 1/10</li>
+      <li>牆線圖層命名要含 <strong>WALL</strong> 或「牆」「墙」或「BS-」其中一種（不分大小寫，例：A-WALL、WALL-1、牆體、內牆 都算）——後台只保留這些圖層上的線，其他圖層會自動清掉，不用你手動整理</li>
+      <li>每段牆用雙線畫出牆厚，門窗位置牆線斷開留缺口，<strong>缺口兩端要用短線封口</strong>，讓每段牆的四邊接起來成為封閉的框——後台是靠封閉的框生面、拉高做牆，沒封閉的牆生不出來</li>
+      <li>門窗只要留缺口就好，門弧、窗線、門扇窗框不用特別處理，放在牆圖層以外的圖層即可（會被自動刪掉）</li>
+      <li>牆圖層上只放牆線，不要混填充線（hatch）、家具圖塊，否則牆面會被切碎或牆的迴路被弄斷</li>
+      <li>柱子、承重牆、管道間放進<strong>名稱同時含「承重」和「牆」</strong>的圖層（例：承重牆、承重牆-柱；只叫「承重柱」不行，因為不含「牆」字，線會被當成其他圖層清掉）——這些圖層上的面不管多厚都會被當實體拉高；一般牆等效厚度超過 40 公分會被誤判成地板，所以厚牆、柱子一律放「承重牆」圖層</li>
+      <li>一個檔只留一層平面：立面、剖面、其他樓層、圖框另存或刪掉——同一檔案疊了兩張平面，外框會變成兩倍大</li>
+      <li>另存新檔（SAVEAS）：用你平常的 AutoCAD 版本存成 <strong>.dwg</strong> 即可（.dxf 也可以）；若後台回報匯入失敗，再另存成舊版（例如 AutoCAD 2013 圖面）重傳一次（後台實際支援到哪個版本需確認）</li>
     </ol>
-    <p class="muted">案子還沒進酷家樂、手上只有 JPG／PDF 平面圖？先在酷家樂用「匯入圖紙 → 自動辨識」把圖變成一個方案，再照上面步驟匯出施工圖 CAD。設計師或建築師直接給的 DWG 也能用，只是圖層（CAD 檔案裡把牆、門窗、標註分開放的一層一層資料，像透明片疊起來）名稱要含「BS-」「WALL」「牆」「墙」其中一種，助理才抓得到牆。若後台回「抓不到牆線」，把 CAD 的牆線圖層名稱寫給助理再丟一次；還是不行就直接找老闆處理。</p>
 
     <span class="step-sub-label">你會看到的（示意）</span>
     <div class="screen">
-      <div class="screen-label">酷家樂下載視窗・示意</div>
+      <div class="screen-label">AutoCAD 圖層面板・示意</div>
       <div class="bubble bubble-bot">
-        <p>☑ 牆體定位圖</p>
-        <p>格式：● CAD　○ PDF</p>
-        <p style="margin-top:8px;"><strong>［下載］</strong></p>
+        <p>☑ WALL　　牆線圖層</p>
+        <p>☑ 承重牆　　柱／承重牆／管道間</p>
+        <p style="color:var(--muted);">☐ DOOR　　門弧（會被清掉）</p>
+        <p style="color:var(--muted);">☐ FURN　　家具（會被清掉）</p>
+        <p style="color:var(--muted);">☐ TEXT　　文字標註（會被清掉）</p>
       </div>
     </div>
+    <p class="muted">只有名稱含 <strong>WALL／牆／墙／BS-</strong> 的圖層上的線，後台才會拿來建模（「承重牆」也算，因為含「牆」字）；其他圖層都會自動清掉，你不用手動刪圖。</p>
 
-    <div class="step-note">注意：只收 .dwg／.dxf。JPG、PNG、PDF 平面圖一律會被退回——助理不會用 AI 辨識圖片裡的牆，怕把床、餐桌、馬桶的圖示誤認成牆。</div>
+    <p class="muted"><strong>常見畫法問題：</strong>牆線沒封口（迴路沒封閉）→ 那段牆生不出來，會收到「抓不到牆線」退件；牆線畫在名稱不含 WALL／牆 的圖層 → 不會收到退件訊息，等 20 分鐘都沒回貼就是這種（後台會通知老闆）——回 AutoCAD 把牆線圖層改名成含 WALL 或牆，再傳一次；圖是 cm 畫的沒先放大 10 倍 → 不會被退件、看起來成功，但模型整個縮成 1/10（12 公尺的房子變 1.2 公尺、牆厚 1.5 公分），透視圖看起來像小模型。</p>
+
+    <div class="step-note">注意：只收 .dwg／.dxf。JPG、PNG、PDF 平面圖一律會被退回——助理不會用 AI 辨識圖片裡的牆，怕把床、餐桌、馬桶的圖示誤認成牆。圖是 cm 畫的要先放大 10 倍再存，不然模型會縮小 10 倍。</div>
   </div>
 
   <div class="step-card">
@@ -365,7 +372,7 @@
       <div class="bubble bubble-me">
         <div class="bubble-name">你</div>
         <p>@如菓工務助理 這是範例案A1 的平面圖 CAD，幫我拉成 3D 看空間感。案名：範例案A1。</p>
-        <div class="bubble-attach">📎 装修图纸.dwg</div>
+        <div class="bubble-attach">📎 範例案A1_平面.dwg</div>
       </div>
     </div>
 
@@ -389,7 +396,7 @@
       </div>
     </div>
 
-    <div class="step-note">注意：如果你附的其實是圖片（.jpg 之類），它會先請你改附 .dwg／.dxf，不會硬把圖片送去建模——這種情況直接跳到步驟 1 重新從酷家樂匯出 CAD 就好。</div>
+    <div class="step-note">注意：如果你附的其實是圖片（.jpg 之類），它會先請你改附 .dwg／.dxf，不會硬把圖片送去建模——這種情況直接回步驟 1 從 AutoCAD 存 .dwg 再傳就好。</div>
   </div>
 
   <div class="step-card">
@@ -416,6 +423,7 @@
     <ol>
       <li>點開訊息裡的三個附件，分別下載</li>
       <li>對照訊息裡寫的檔名，確認哪個是模型、哪個是俯視圖、哪個是透視圖</li>
+      <li>先看訊息第二行的「外框 W × D mm」：要等於房子的實際尺寸（12 公尺 × 9 公尺的房子應顯示約 <strong>12000 × 9000</strong>）。如果數字小了 10 倍（例如 1200 × 900），代表圖是 cm 畫的，回 AutoCAD 用 SCALE 放大 10 倍再傳一次</li>
     </ol>
 
     <span class="step-sub-label">你會看到的（示意）</span>
@@ -430,22 +438,24 @@
       </div>
     </div>
 
-    <div class="step-note">注意：Discord 附件有時會顯示成一串隨機英數碼，看起來完全不像檔名，這是正常現象，不是壞掉——認副檔名就好：「.skp」一定是模型，兩張「.png」點開看一眼就知道哪張是俯視、哪張是透視。下載後想改名，照訊息裡列出來的檔名改就好。檔名只會保留案名裡的英文和數字，中文會被拿掉（例：範例案A1 → A1_3D.skp）；案名全是中文時，會改用 plan 加系統編號前 6 碼當檔名。有指定牆高的話，最後那句免責會變成「牆高 &lt;你指定的數字&gt;cm（本單指定）」。</div>
+    <div class="step-note">注意：Discord 附件有時會顯示成一串隨機英數碼，看起來完全不像檔名，這是正常現象，不是壞掉——認副檔名就好：「.skp」一定是模型，兩張「.png」點開看一眼就知道哪張是俯視、哪張是透視。下載後想改名，照訊息裡列出來的檔名改就好。檔名只會保留案名裡的英文和數字，中文會被拿掉（例：範例案A1 → A1_3D.skp）；案名全是中文時，會改用 plan 加系統編號前 6 碼當檔名。有指定牆高的話，最後那句免責會變成「牆高 &lt;你指定的數字&gt;cm（本單指定）」。「牆面 N 面」是後台統計用的，連在一起的牆會算成 1 面，不用拿來對牆的數量；只要不是 0 就代表有抓到牆。</div>
   </div>
 
   <div class="step-card">
-    <div class="step-head"><span class="step-badge">6</span><h3>打開 .skp 看模型</h3></div>
+    <div class="step-head"><span class="step-badge">6</span><h3>看成品、交給該交的人</h3></div>
 
     <span class="step-sub-label">你要做的</span>
     <ol>
-      <li>電腦有裝 SketchUp（2021 以上版本都可以，含 Pro 2023）：檔案 › 開啟，選剛下載的 .skp</li>
-      <li>電腦沒裝：可以用 SketchUp 網頁版，登入後選「開啟 › 從裝置上傳」（網頁版功能以官方畫面為準）；或用 SketchUp Viewer 開</li>
+      <li>先看兩張圖就好：<strong>_top.png</strong> 看格局、<strong>_iso.png</strong> 看空間感——這兩張就是給你和師傅討論用的</li>
+      <li><strong>.skp</strong> 模型檔是給有 SketchUp 的人（老闆／設計師）繼續用的，需要時把那則訊息連結或檔案轉給他就好，不用自己開</li>
+      <li>自己想轉 3D 看看：免費的 <strong>SketchUp Viewer</strong> 或 SketchUp 網頁版都能開（要不要在公司電腦安裝，先問老闆）</li>
     </ol>
 
     <span class="step-sub-label">你會看到的（示意）</span>
     <div class="screen">
-      <div class="screen-label">.skp 模型內容・示意</div>
-      <p class="muted" style="margin:0;">一組拉高的牆體，門窗位置只是牆上的缺口，沒有家具、沒有門扇窗框——是「空間骨架」，不是完整裝修模型。</p>
+      <div class="screen-label">兩張圖的用途・示意</div>
+      <p class="muted" style="margin:0 0 6px;"><strong>_top.png（俯視）</strong>——看格局、牆位、動線，量大概尺寸</p>
+      <p class="muted" style="margin:0;"><strong>_iso.png（透視）</strong>——看空間感、樓高、視覺效果</p>
     </div>
 
     <div class="step-note">注意：尺寸依 CAD 圖層換算，不是現場實測；這份模型只能拿來看空間感、內部討論用，<strong>不能拿去報價、不能當施工圖</strong>，未經老闆核可不得交付客戶。</div>
@@ -454,18 +464,19 @@
   <h2>退件對照表</h2>
   <p class="muted">寄出去被退件不是壞掉，是助理照規則誠實告訴你少了什麼。它會直接在頻道回你一句，照下表處理就好。</p>
   <p class="muted">手機請左右滑動看完整表格。</p>
+  <p class="muted">機器人的退件話術用詞目前還沒跟著更新，意思都一樣：請附 .dwg 檔。</p>
   <div class="tbl">
     <table>
       <tr><th>機器人回什麼話</th><th>代表什麼</th><th>你怎麼做</th></tr>
       <tr>
         <td class="msg">「📐 這張單沒有附平面圖 CAD 檔。平面圖轉 3D 只吃 CAD（.dwg／.dxf）——請從酷家樂「匯入圖紙 → 自動辨識 → 匯出施工圖 CAD」取得 DWG，再丟一次給我就可以了。」</td>
         <td>訊息裡忘記附檔了</td>
-        <td>重新傳一次，這次要把 .dwg 檔附上</td>
+        <td>照步驟 1 在 AutoCAD 存成 .dwg 再傳（機器人訊息裡提到的那個匯出來源，對用 AutoCAD 的你來說，意思就是「請改附 .dwg」）</td>
       </tr>
       <tr>
         <td class="msg">「📐 你附的是 .jpg 檔，平面圖轉 3D 只吃 CAD（.dwg／.dxf）——圖片我不做辨識（牆線會誤判）。請從酷家樂「匯入圖紙 → 自動辨識 → 匯出施工圖 CAD」取得 DWG 再丟一次，我就能拉成 3D 給你。」</td>
         <td>附錯格式了（附的是圖片，不是 CAD）</td>
-        <td>照步驟 1，去酷家樂匯出施工圖 CAD 後再傳</td>
+        <td>照步驟 1，在 AutoCAD 存成 .dwg 再傳（機器人訊息裡提到的那個匯出來源，對用 AutoCAD 的你來說，一樣是「請改附 .dwg」）</td>
       </tr>
       <tr>
         <td class="msg">「📐 我這邊找不到你附的平面圖檔，麻煩把 CAD 檔（.dwg／.dxf）重新傳一次。」</td>
@@ -480,11 +491,11 @@
       <tr>
         <td class="msg">「📐 這張 CAD 我抓不到牆線（可能圖層名不是酷家樂預設的，或牆線沒封閉）。麻煩確認匯出的是酷家樂施工圖的「牆體定位圖」CAD，再丟一次；還是不行的話我請老闆看一下圖層。」</td>
         <td>CAD 圖層名不是助理認得的名稱，或牆線沒有封閉起來</td>
-        <td>確認匯出的是「牆體定位圖」CAD 再傳一次；還是不行就等老闆看圖層</td>
+        <td>回 AutoCAD 檢查：牆線圖層名稱是否含 WALL／牆，每段牆是否封閉（門窗缺口有沒有封口），牆圖層上有沒有混到填充或文字；改好再傳一次，還是不行找老闆</td>
       </tr>
       <tr>
         <td class="msg">（頻道沒有任何回貼，超過 20 分鐘）</td>
-        <td>後台處理卡住或出錯，老闆端會收到通知</td>
+        <td>後台處理卡住或出錯，老闆端會收到通知。最常見原因：牆線圖層名稱不含 WALL／牆／墙，後台一條牆線都沒抓到</td>
         <td>直接找老闆，不用一直重丟</td>
       </tr>
     </table>
@@ -493,8 +504,8 @@
   <h2>常見問題</h2>
 
   <div class="qa">
-    <p class="q">Q1：平面圖只有 JPG 或 PDF，還沒有酷家樂方案，怎麼辦？</p>
-    <p class="a">先在酷家樂用「匯入圖紙 → 自動辨識」把圖變成一個方案，再照步驟 1 匯出「施工圖紙 › 牆體定位圖」CAD，最後傳那個 .dwg 檔給助理。</p>
+    <p class="q">Q1：手上只有 JPG／PDF 平面圖，沒有 .dwg，怎麼辦？</p>
+    <p class="a">先在 AutoCAD 照圖描一張（單位 mm、牆線放 WALL 圖層、每段牆封閉）存成 .dwg；沒辦法自己描的話找老闆或設計師要 .dwg。助理不吃圖片。</p>
   </div>
   <div class="qa">
     <p class="q">Q2：設計師或建築師直接給我 DWG，可以用嗎？</p>
@@ -513,8 +524,8 @@
     <p class="a">不是，這是 Discord 顯示附件的正常現象。認副檔名就好：「.skp」是模型，兩張「.png」點開看一眼就知道哪張是俯視、哪張是透視；下載後想改名，照訊息裡列出來的檔名改就好。</p>
   </div>
   <div class="qa">
-    <p class="q">Q6：電腦沒裝 SketchUp，能看模型嗎？</p>
-    <p class="a">可以，用 SketchUp 網頁版登入後「開啟 › 從裝置上傳」，或用 SketchUp Viewer 開（網頁版功能以官方畫面為準）。</p>
+    <p class="q">Q6：我一定要開 .skp 嗎？</p>
+    <p class="a">不用。日常看格局與空間感用回貼的兩張圖就夠；.skp 是給有 SketchUp 的人（老闆／設計師）用的。想自己看 3D 可裝免費的 SketchUp Viewer，先問老闆。</p>
   </div>
   <div class="qa">
     <p class="q">Q7：這個模型可以直接拿去報價或畫施工圖嗎？</p>
@@ -554,7 +565,7 @@
     </div>
   </div>
 
-  <footer>如菓室內裝修・內部文件，請勿外傳｜返回 <a href="index.html">使用指南首頁</a>｜v1 2026-09-23</footer>
+  <footer>如菓室內裝修・內部文件，請勿外傳｜返回 <a href="index.html">使用指南首頁</a>｜v1.1 2026-09-23</footer>
 
 </div>
 </body>
