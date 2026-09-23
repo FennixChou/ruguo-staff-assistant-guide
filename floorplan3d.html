@@ -1,0 +1,561 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>平面圖轉 3D 操作手冊</title>
+<style>
+  :root {
+    --bg: #F2ECDF;
+    --surface: #FCFAF4;
+    --surface-2: #F7F1E6;
+    --ink: #22271F;
+    --muted: #62665A;
+    --line: #E4DCCB;
+    --primary: #34573B;
+    --primary-strong: #274430;
+    --primary-soft: rgba(52,87,59,.10);
+    --primary-line: rgba(52,87,59,.30);
+    --clay: #8F6234;
+    --warn: #96611B;
+    --danger: #AF4636;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #15170F;
+      --surface: #1E2016;
+      --surface-2: #24271B;
+      --ink: #ECE9DE;
+      --muted: #9D9B88;
+      --line: #2F3123;
+      --primary: #9BC084;
+      --primary-strong: #B4D49E;
+      --primary-soft: rgba(155,192,132,.14);
+      --primary-line: rgba(155,192,132,.38);
+      --clay: #CB9C6E;
+      --warn: #E0AC5B;
+      --danger: #E0806F;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #15170F; --surface: #1E2016; --surface-2: #24271B; --ink: #ECE9DE;
+    --muted: #9D9B88; --line: #2F3123; --primary: #9BC084; --primary-strong: #B4D49E;
+    --primary-soft: rgba(155,192,132,.14); --primary-line: rgba(155,192,132,.38);
+    --clay: #CB9C6E; --warn: #E0AC5B; --danger: #E0806F;
+  }
+  :root[data-theme="light"] {
+    --bg: #F2ECDF; --surface: #FCFAF4; --surface-2: #F7F1E6; --ink: #22271F;
+    --muted: #62665A; --line: #E4DCCB; --primary: #34573B; --primary-strong: #274430;
+    --primary-soft: rgba(52,87,59,.10); --primary-line: rgba(52,87,59,.30);
+    --clay: #8F6234; --warn: #96611B; --danger: #AF4636;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Segoe UI","Microsoft JhengHei","PingFang TC","Noto Sans TC",system-ui,sans-serif;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--primary); }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 44px 22px; }
+  header.hero {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 22px 24px;
+    margin-bottom: 24px;
+  }
+  .kicker {
+    display: inline-block;
+    font-size: .76rem;
+    letter-spacing: .05em;
+    color: var(--primary);
+    background: var(--primary-soft);
+    border: 1px solid var(--primary-line);
+    border-radius: 999px;
+    padding: 3px 12px;
+    margin-bottom: 10px;
+  }
+  h1 { font-size: 1.55rem; font-weight: 600; margin: 0 0 8px; color: var(--ink); }
+  .lede { color: var(--muted); font-size: .95rem; margin: 0; }
+  h2 {
+    font-size: 1.15rem;
+    color: var(--primary);
+    margin: 34px 0 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--line);
+  }
+  h3 { font-size: 1rem; margin: 18px 0 8px; color: var(--ink); }
+  p { margin: 0 0 10px; }
+  .muted { color: var(--muted); font-size: .88rem; }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 14px;
+  }
+  .card h3 { margin-top: 0; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  @media (max-width: 720px) { .grid3 { grid-template-columns: 1fr; } }
+  .tag {
+    display: inline-block;
+    font-size: .76rem;
+    letter-spacing: .03em;
+    border-radius: 999px;
+    padding: 2px 10px;
+    margin-bottom: 10px;
+  }
+  .tag-a { color: var(--primary); background: var(--primary-soft); border: 1px solid var(--primary-line); }
+  .tag-b { color: var(--clay); background: rgba(143,98,52,.12); border: 1px solid rgba(143,98,52,.3); }
+  .tag-c { color: var(--warn); background: rgba(150,97,27,.12); border: 1px solid rgba(150,97,27,.3); }
+  ul { margin: 0; padding-left: 1.15em; }
+  li { margin-bottom: 6px; }
+  .examples { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 720px) { .examples { grid-template-columns: 1fr; } }
+  .ex-good, .ex-bad {
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    padding: 16px 18px;
+  }
+  .ex-good { background: var(--primary-soft); border-color: var(--primary-line); }
+  .ex-bad { background: rgba(175,70,54,.08); border-color: rgba(175,70,54,.28); }
+  .ex-title { font-weight: 600; margin-bottom: 10px; }
+  .ex-good .ex-title { color: var(--primary-strong); }
+  .ex-bad .ex-title { color: var(--danger); }
+  .ex-good ol, .ex-bad ol { padding-left: 1.3em; margin: 0; }
+  .ex-good li, .ex-bad li { margin-bottom: 8px; }
+  .boundary-box {
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--danger);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 14px;
+  }
+  .boundary-box li { margin-bottom: 8px; }
+  .callout {
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--warn);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-top: 14px;
+    font-size: .95rem;
+  }
+  .qa {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 10px;
+  }
+  .qa .q { font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+  .qa .a { color: var(--muted); margin: 0; }
+  footer {
+    margin-top: 34px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: .82rem;
+    text-align: center;
+  }
+
+  /* ---- 以下為本頁新增（沿用上方色彩 token，非 index.html 既有樣式） ---- */
+
+  .quickref ol { padding-left: 1.3em; margin: 0; }
+  .quickref li { margin-bottom: 8px; }
+  .quickref b { color: var(--primary-strong); }
+
+  .flow-wrap {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 18px 14px 10px;
+    margin-bottom: 14px;
+  }
+  .flow-wrap svg { display: block; width: 100%; max-width: 520px; height: auto; margin: 0 auto; }
+  .flow-caption { text-align: center; font-size: .8rem; color: var(--muted); margin: 4px 0 0; }
+
+  .prep-list li { margin-bottom: 10px; }
+
+  .step-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    margin-bottom: 16px;
+  }
+  .step-head { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+  .step-badge {
+    flex: 0 0 auto;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: var(--surface);
+    font-weight: 700;
+    font-size: .9rem;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .step-head h3 { margin: 0; font-size: 1.02rem; }
+  .step-sub-label {
+    display: block;
+    font-size: .76rem;
+    font-weight: 600;
+    letter-spacing: .04em;
+    color: var(--primary);
+    margin: 16px 0 6px;
+  }
+  .step-card ol { padding-left: 1.3em; }
+  .step-card ol li { margin-bottom: 8px; }
+  .step-note {
+    background: var(--surface-2);
+    border-left: 3px solid var(--warn);
+    border-radius: 0 8px 8px 0;
+    padding: 10px 14px;
+    font-size: .88rem;
+    color: var(--muted);
+  }
+
+  .screen {
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .screen-label {
+    font-size: .72rem;
+    letter-spacing: .05em;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  .bubble { max-width: 88%; border-radius: 14px; padding: 10px 14px; margin-bottom: 8px; font-size: .89rem; line-height: 1.6; }
+  .bubble-name { font-size: .72rem; color: var(--muted); margin-bottom: 3px; }
+  .bubble-me { margin-left: auto; background: var(--primary-soft); border: 1px solid var(--primary-line); color: var(--ink); border-bottom-right-radius: 4px; }
+  .bubble-bot { margin-right: auto; background: var(--surface); border: 1px solid var(--line); color: var(--ink); border-bottom-left-radius: 4px; }
+  .bubble-attach {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--surface); border: 1px dashed var(--line); border-radius: 8px;
+    padding: 4px 10px; font-size: .8rem; margin-top: 6px; color: var(--muted);
+  }
+  .bubble p { margin: 0; }
+
+  .tbl { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); margin-bottom: 14px; }
+  .tbl table { border-collapse: collapse; width: 100%; min-width: 620px; }
+  .tbl th { font-size: .76rem; letter-spacing: .04em; color: var(--muted); background: var(--surface-2); text-align: left; padding: 9px 12px; }
+  .tbl td { padding: 10px 12px; border-top: 1px solid var(--line); vertical-align: top; font-size: .89rem; }
+  .tbl td.msg { color: var(--ink); }
+
+  .outcome-title { font-weight: 600; margin-bottom: 10px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <span class="kicker">如菓工務助理・員工使用指南</span>
+    <h1>平面圖轉 3D：操作手冊</h1>
+    <p class="lede">給<strong>員工</strong>用：把一張平面圖 CAD（電腦繪的施工圖檔）丟給如菓工務助理，後台會自動幫你在 SketchUp 拉出一個 3D 牆體模型，讓你和老闆、師傅快速看懂空間格局。全程在 Discord 完成，不用自己開任何繪圖軟體。</p>
+  </header>
+
+  <div class="card quickref">
+    <h3>60 秒速查</h3>
+    <ol>
+      <li>準備一個平面圖 <b>CAD 檔（.dwg 或 .dxf）</b>——酷家樂帳號裡就能匯出</li>
+      <li>到<b>工務頻道</b>打字：<b>@如菓工務助理</b> ＋ 你的需求，把 CAD 檔當附件夾進同一則訊息</li>
+      <li>等 <b>通常 5–10 分鐘，最多 20 分鐘</b>，後台自動處理，不用一直盯著</li>
+      <li>收到 <b>.skp 模型檔</b> ＋ <b>俯視圖、透視圖</b> 兩張圖，一共三個附件</li>
+      <li>這份模型<b>只供空間感參考</b>，不能拿去報價、不能當施工圖</li>
+    </ol>
+  </div>
+
+  <h2>流程總覽</h2>
+  <div class="flow-wrap">
+    <svg viewBox="0 0 640 994" role="img" aria-label="流程圖：酷家樂匯出 CAD，上傳到 Discord，後台 SketchUp 自動建模，回貼 skp 與俯視圖透視圖">
+      <rect x="40" y="16" width="560" height="180" rx="12" fill="var(--surface)" stroke="var(--primary-line)" stroke-width="1.5"/>
+      <text x="320" y="64" text-anchor="middle" font-size="29" font-weight="600" fill="var(--ink)">① 酷家樂匯出平面圖 CAD</text>
+      <text x="320" y="110" text-anchor="middle" font-size="27" fill="var(--muted)">「牆體定位圖」，格式選 CAD，</text>
+      <text x="320" y="151" text-anchor="middle" font-size="27" fill="var(--muted)">得到一個 .dwg 檔</text>
+
+      <line x1="320" y1="196" x2="320" y2="234" stroke="var(--primary)" stroke-width="2.5"/>
+      <polygon points="320,244 311,228 329,228" fill="var(--primary)"/>
+
+      <rect x="40" y="250" width="560" height="180" rx="12" fill="var(--surface)" stroke="var(--primary-line)" stroke-width="1.5"/>
+      <text x="320" y="298" text-anchor="middle" font-size="29" font-weight="600" fill="var(--ink)">② Discord 上傳</text>
+      <text x="320" y="344" text-anchor="middle" font-size="27" fill="var(--muted)">工務頻道 @如菓工務助理</text>
+      <text x="320" y="385" text-anchor="middle" font-size="27" fill="var(--muted)">＋ 把 .dwg 當附件送出</text>
+
+      <line x1="320" y1="430" x2="320" y2="468" stroke="var(--primary)" stroke-width="2.5"/>
+      <polygon points="320,478 311,462 329,462" fill="var(--primary)"/>
+
+      <rect x="40" y="484" width="560" height="220" rx="12" fill="var(--primary-soft)" stroke="var(--primary-line)" stroke-width="1.5"/>
+      <text x="320" y="532" text-anchor="middle" font-size="29" font-weight="600" fill="var(--ink)">③ 後台 SketchUp 自動建模</text>
+      <text x="320" y="578" text-anchor="middle" font-size="27" fill="var(--muted)">全自動處理，不用人盯著</text>
+      <text x="320" y="619" text-anchor="middle" font-size="27" fill="var(--muted)">每 5 分鐘收一次單</text>
+      <text x="320" y="660" text-anchor="middle" font-size="27" fill="var(--muted)">通常 5–10 分鐘，最多 20 分鐘</text>
+
+      <line x1="320" y1="704" x2="320" y2="742" stroke="var(--primary)" stroke-width="2.5"/>
+      <polygon points="320,752 311,736 329,736" fill="var(--primary)"/>
+
+      <rect x="40" y="758" width="560" height="220" rx="12" fill="var(--surface)" stroke="var(--primary-line)" stroke-width="1.5"/>
+      <text x="320" y="806" text-anchor="middle" font-size="29" font-weight="600" fill="var(--ink)">④ 回貼原頻道・三個附件</text>
+      <text x="320" y="852" text-anchor="middle" font-size="27" fill="var(--muted)">.skp（SketchUp 模型）</text>
+      <text x="320" y="893" text-anchor="middle" font-size="27" fill="var(--muted)">俯視圖 .png、透視圖 .png</text>
+      <text x="320" y="934" text-anchor="middle" font-size="27" fill="var(--warn)">附「僅供空間感參考」提醒</text>
+    </svg>
+    <p class="flow-caption">全程通常 5–10 分鐘、最多 20 分鐘，中間你不需要做任何事</p>
+  </div>
+
+  <h2>開始之前</h2>
+  <div class="card">
+    <h3>你需要準備三樣東西</h3>
+    <ul class="prep-list">
+      <li><strong>這個案子的平面圖 CAD 檔</strong>——酷家樂帳號裡有這個案子的方案，或設計師／建築師直接給你 <strong>.dwg／.dxf</strong>（CAD 是「電腦繪的施工圖檔」的統稱，DWG 和 DXF 是這種檔案兩種常見的副檔名，助理都收）</li>
+      <li><strong>已經被老闆加進工務頻道</strong>——如果還沒有，跟老闆說一聲</li>
+      <li><strong>一台能開 Discord 的電腦或手機</strong>——整個流程都在 Discord 裡完成，不用另外開繪圖軟體</li>
+    </ul>
+  </div>
+
+  <h2>怎麼做：6 個步驟</h2>
+
+  <div class="step-card">
+    <div class="step-head"><span class="step-badge">1</span><h3>拿到平面圖 CAD 檔</h3></div>
+
+    <span class="step-sub-label">你要做的</span>
+    <ol>
+      <li>案子在酷家樂裡已經有方案：登入酷家樂網頁版 →「我的設計」找到這個案子 →「查看詳情」</li>
+      <li>詳情頁點「更多 ▾」→「匯出」→「施工圖紙」，會另外開一個「施工圖工具」分頁</li>
+      <li>在新分頁上方點「圖紙&清單」→ 左側「圖紙清單」裡找「平面圖紙 › 牆體定位圖」</li>
+      <li>點右上角藍色「下載」→ 跳出的視窗只勾「牆體定位圖」、格式選「CAD」（本來就是預設值）→「下載」</li>
+      <li>瀏覽器下載資料夾會多一個 zip，解壓縮後裡面那個 <strong>.dwg</strong> 檔就是你要的</li>
+    </ol>
+    <p class="muted">案子還沒進酷家樂、手上只有 JPG／PDF 平面圖？先在酷家樂用「匯入圖紙 → 自動辨識」把圖變成一個方案，再照上面步驟匯出施工圖 CAD。設計師或建築師直接給的 DWG 也能用，只是圖層（CAD 檔案裡把牆、門窗、標註分開放的一層一層資料，像透明片疊起來）名稱要含「BS-」「WALL」「牆」「墙」其中一種，助理才抓得到牆。若後台回「抓不到牆線」，把 CAD 的牆線圖層名稱寫給助理再丟一次；還是不行就直接找老闆處理。</p>
+
+    <span class="step-sub-label">你會看到的（示意）</span>
+    <div class="screen">
+      <div class="screen-label">酷家樂下載視窗・示意</div>
+      <div class="bubble bubble-bot">
+        <p>☑ 牆體定位圖</p>
+        <p>格式：● CAD　○ PDF</p>
+        <p style="margin-top:8px;"><strong>［下載］</strong></p>
+      </div>
+    </div>
+
+    <div class="step-note">注意：只收 .dwg／.dxf。JPG、PNG、PDF 平面圖一律會被退回——助理不會用 AI 辨識圖片裡的牆，怕把床、餐桌、馬桶的圖示誤認成牆。</div>
+  </div>
+
+  <div class="step-card">
+    <div class="step-head"><span class="step-badge">2</span><h3>到工務頻道，把 CAD 傳給如菓工務助理</h3></div>
+
+    <span class="step-sub-label">你要做的</span>
+    <ol>
+      <li>打開 Discord，進到老闆開通給你的「工務頻道」</li>
+      <li>打一則訊息：<strong>@ 提到「如菓工務助理」</strong> ＋ 一句需求 ＋ 案名（牆高可省略不寫，會用預設值 300 公分）</li>
+      <li>怎麼「@」才算數：先打 @ 再打「如菓」兩個字，從跳出的清單點選「如菓工務助理」，名字變成藍底色塊才算真的有 @ 到；只是把 @如菓工務助理 當文字打出來，它不會收到</li>
+      <li>把 .dwg 檔當<strong>附件</strong>夾進同一則訊息——電腦：把檔案直接拖進輸入框，或按輸入框左邊「＋」選「上傳檔案」；手機：點輸入框旁「＋」選「檔案」</li>
+      <li>送出</li>
+    </ol>
+    <p class="muted">如果需要指定牆高，牆高可以講 240～400 公分之間的整數，例如「牆高 320cm」。</p>
+
+    <span class="step-sub-label">你會看到的（示意）</span>
+    <div class="screen">
+      <div class="screen-label">工務頻道・示意</div>
+      <div class="bubble bubble-me">
+        <div class="bubble-name">你</div>
+        <p>@如菓工務助理 這是範例案A1 的平面圖 CAD，幫我拉成 3D 看空間感。案名：範例案A1。</p>
+        <div class="bubble-attach">📎 装修图纸.dwg</div>
+      </div>
+    </div>
+
+    <div class="step-note">注意：一則訊息一張圖，文字和附件要在同一則訊息裡送出。</div>
+  </div>
+
+  <div class="step-card">
+    <div class="step-head"><span class="step-badge">3</span><h3>收到「已收單」的回覆</h3></div>
+
+    <span class="step-sub-label">你要做的</span>
+    <ol>
+      <li>不用做什麼，等它回覆一句就好</li>
+    </ol>
+
+    <span class="step-sub-label">你會看到的（示意）</span>
+    <div class="screen">
+      <div class="screen-label">工務頻道・示意</div>
+      <div class="bubble bubble-bot">
+        <div class="bubble-name">如菓工務助理</div>
+        <p>收到，已轉後台處理，約 5–20 分鐘會自動回貼結果。</p>
+      </div>
+    </div>
+
+    <div class="step-note">注意：如果你附的其實是圖片（.jpg 之類），它會先請你改附 .dwg／.dxf，不會硬把圖片送去建模——這種情況直接跳到步驟 1 重新從酷家樂匯出 CAD 就好。</div>
+  </div>
+
+  <div class="step-card">
+    <div class="step-head"><span class="step-badge">4</span><h3>等後台建模</h3></div>
+
+    <span class="step-sub-label">你要做的</span>
+    <ol>
+      <li>先去忙別的，不用一直盯著頻道</li>
+    </ol>
+
+    <span class="step-sub-label">你會看到的（示意）</span>
+    <div class="screen">
+      <div class="screen-label">時間軸・示意</div>
+      <p class="muted" style="margin:0;">送出 → 後台每 5 分鐘收一次單 → 建模本身約 15–30 秒 → 通常 <strong>5–10 分鐘</strong>，最多 <strong>20 分鐘</strong>會回貼</p>
+    </div>
+
+    <div class="step-note">注意：同一時間只能跑一張模型。如果剛好有別人也在丟，你的單會自動排到下一輪（5 分鐘後），不用重複傳。超過 20 分鐘還沒有任何回貼，直接找老闆，不用一直重丟。</div>
+  </div>
+
+  <div class="step-card">
+    <div class="step-head"><span class="step-badge">5</span><h3>收成品：.skp 模型 ＋ 2 張圖</h3></div>
+
+    <span class="step-sub-label">你要做的</span>
+    <ol>
+      <li>點開訊息裡的三個附件，分別下載</li>
+      <li>對照訊息裡寫的檔名，確認哪個是模型、哪個是俯視圖、哪個是透視圖</li>
+    </ol>
+
+    <span class="step-sub-label">你會看到的（示意）</span>
+    <div class="screen">
+      <div class="screen-label">工務頻道・示意</div>
+      <div class="bubble bubble-bot">
+        <div class="bubble-name">如菓工務助理</div>
+        <p>🏠 平面圖轉 3D 完成：範例案A1</p>
+        <p>外框 8200 x 6400 mm｜牆面 18 面｜牆高 300 cm</p>
+        <p>附件：A1_3D.skp（SketchUp 模型）、A1_top.png（俯視）、A1_iso.png（透視）</p>
+        <p>⚠️ 比例依 CAD 圖層、牆高 300cm 預設、非現場實測；僅供空間感參考，禁入報價與施工圖</p>
+      </div>
+    </div>
+
+    <div class="step-note">注意：Discord 附件有時會顯示成一串隨機英數碼，看起來完全不像檔名，這是正常現象，不是壞掉——認副檔名就好：「.skp」一定是模型，兩張「.png」點開看一眼就知道哪張是俯視、哪張是透視。下載後想改名，照訊息裡列出來的檔名改就好。檔名只會保留案名裡的英文和數字，中文會被拿掉（例：範例案A1 → A1_3D.skp）；案名全是中文時，會改用 plan 加系統編號前 6 碼當檔名。有指定牆高的話，最後那句免責會變成「牆高 &lt;你指定的數字&gt;cm（本單指定）」。</div>
+  </div>
+
+  <div class="step-card">
+    <div class="step-head"><span class="step-badge">6</span><h3>打開 .skp 看模型</h3></div>
+
+    <span class="step-sub-label">你要做的</span>
+    <ol>
+      <li>電腦有裝 SketchUp（2021 以上版本都可以，含 Pro 2023）：檔案 › 開啟，選剛下載的 .skp</li>
+      <li>電腦沒裝：可以用 SketchUp 網頁版，登入後選「開啟 › 從裝置上傳」（網頁版功能以官方畫面為準）；或用 SketchUp Viewer 開</li>
+    </ol>
+
+    <span class="step-sub-label">你會看到的（示意）</span>
+    <div class="screen">
+      <div class="screen-label">.skp 模型內容・示意</div>
+      <p class="muted" style="margin:0;">一組拉高的牆體，門窗位置只是牆上的缺口，沒有家具、沒有門扇窗框——是「空間骨架」，不是完整裝修模型。</p>
+    </div>
+
+    <div class="step-note">注意：尺寸依 CAD 圖層換算，不是現場實測；這份模型只能拿來看空間感、內部討論用，<strong>不能拿去報價、不能當施工圖</strong>，未經老闆核可不得交付客戶。</div>
+  </div>
+
+  <h2>退件對照表</h2>
+  <p class="muted">寄出去被退件不是壞掉，是助理照規則誠實告訴你少了什麼。它會直接在頻道回你一句，照下表處理就好。</p>
+  <p class="muted">手機請左右滑動看完整表格。</p>
+  <div class="tbl">
+    <table>
+      <tr><th>機器人回什麼話</th><th>代表什麼</th><th>你怎麼做</th></tr>
+      <tr>
+        <td class="msg">「📐 這張單沒有附平面圖 CAD 檔。平面圖轉 3D 只吃 CAD（.dwg／.dxf）——請從酷家樂「匯入圖紙 → 自動辨識 → 匯出施工圖 CAD」取得 DWG，再丟一次給我就可以了。」</td>
+        <td>訊息裡忘記附檔了</td>
+        <td>重新傳一次，這次要把 .dwg 檔附上</td>
+      </tr>
+      <tr>
+        <td class="msg">「📐 你附的是 .jpg 檔，平面圖轉 3D 只吃 CAD（.dwg／.dxf）——圖片我不做辨識（牆線會誤判）。請從酷家樂「匯入圖紙 → 自動辨識 → 匯出施工圖 CAD」取得 DWG 再丟一次，我就能拉成 3D 給你。」</td>
+        <td>附錯格式了（附的是圖片，不是 CAD）</td>
+        <td>照步驟 1，去酷家樂匯出施工圖 CAD 後再傳</td>
+      </tr>
+      <tr>
+        <td class="msg">「📐 我這邊找不到你附的平面圖檔，麻煩把 CAD 檔（.dwg／.dxf）重新傳一次。」</td>
+        <td>檔案上傳失敗或漏帶附件</td>
+        <td>重新傳一次 CAD 檔</td>
+      </tr>
+      <tr>
+        <td class="msg">「📐 牆高 &lt;N&gt;mm 超出可接受範圍（2400–4000mm），麻煩重講一個牆高，或不指定直接用預設 300cm。」</td>
+        <td>你講的牆高數字不在允許區間（240～400 公分）</td>
+        <td>改講一個 240～400 公分之間的數字，或乾脆不講、用預設 300cm</td>
+      </tr>
+      <tr>
+        <td class="msg">「📐 這張 CAD 我抓不到牆線（可能圖層名不是酷家樂預設的，或牆線沒封閉）。麻煩確認匯出的是酷家樂施工圖的「牆體定位圖」CAD，再丟一次；還是不行的話我請老闆看一下圖層。」</td>
+        <td>CAD 圖層名不是助理認得的名稱，或牆線沒有封閉起來</td>
+        <td>確認匯出的是「牆體定位圖」CAD 再傳一次；還是不行就等老闆看圖層</td>
+      </tr>
+      <tr>
+        <td class="msg">（頻道沒有任何回貼，超過 20 分鐘）</td>
+        <td>後台處理卡住或出錯，老闆端會收到通知</td>
+        <td>直接找老闆，不用一直重丟</td>
+      </tr>
+    </table>
+  </div>
+
+  <h2>常見問題</h2>
+
+  <div class="qa">
+    <p class="q">Q1：平面圖只有 JPG 或 PDF，還沒有酷家樂方案，怎麼辦？</p>
+    <p class="a">先在酷家樂用「匯入圖紙 → 自動辨識」把圖變成一個方案，再照步驟 1 匯出「施工圖紙 › 牆體定位圖」CAD，最後傳那個 .dwg 檔給助理。</p>
+  </div>
+  <div class="qa">
+    <p class="q">Q2：設計師或建築師直接給我 DWG，可以用嗎？</p>
+    <p class="a">可以，但牆線圖層名要含「BS-」「WALL」「牆」「墙」其中一種，助理才抓得到牆。若後台回「抓不到牆線」，把 CAD 的牆線圖層名稱寫給助理再丟一次；還是不行就直接找老闆處理。</p>
+  </div>
+  <div class="qa">
+    <p class="q">Q3：牆高一定要講嗎？</p>
+    <p class="a">不用，不講就是預設 300 公分。真的要指定的話，範圍是 240～400 公分之間的整數（後台換算成毫米檢查，也就是 2400–4000mm），超出這個範圍會被退件請你重講。</p>
+  </div>
+  <div class="qa">
+    <p class="q">Q4：多久會回？</p>
+    <p class="a">通常 5–10 分鐘，最多 20 分鐘。同一時間只能跑一張，如果剛好有別人也在丟，你的單會自動排到下一輪，不用重丟；超過 20 分鐘還沒回，直接找老闆。</p>
+  </div>
+  <div class="qa">
+    <p class="q">Q5：附件的檔名顯示成一串看不懂的英數字，是不是傳錯了？</p>
+    <p class="a">不是，這是 Discord 顯示附件的正常現象。認副檔名就好：「.skp」是模型，兩張「.png」點開看一眼就知道哪張是俯視、哪張是透視；下載後想改名，照訊息裡列出來的檔名改就好。</p>
+  </div>
+  <div class="qa">
+    <p class="q">Q6：電腦沒裝 SketchUp，能看模型嗎？</p>
+    <p class="a">可以，用 SketchUp 網頁版登入後「開啟 › 從裝置上傳」，或用 SketchUp Viewer 開（網頁版功能以官方畫面為準）。</p>
+  </div>
+  <div class="qa">
+    <p class="q">Q7：這個模型可以直接拿去報價或畫施工圖嗎？</p>
+    <p class="a">不行。門窗只是牆上的缺口，沒有門扇窗框，也沒有家具，尺寸依 CAD 圖層換算、非現場實測，只能當空間感參考，禁入報價與施工圖。</p>
+  </div>
+  <div class="qa">
+    <p class="q">Q8：可以私訊（DM）機器人傳圖嗎？</p>
+    <p class="a">可以，但第一次要先跟它要配對碼、等老闆核准後才能用；平常在工務頻道 @它最直接。</p>
+  </div>
+  <div class="qa">
+    <p class="q">Q9：已經超過 20 分鐘還沒收到回貼，怎麼辦？</p>
+    <p class="a">直接找老闆，不用一直重丟——這種情況通常是後台處理卡住或出錯，老闆端會收到系統通知。</p>
+  </div>
+  <div class="qa">
+    <p class="q">Q10：工地遇到緊急或工安狀況，可以透過它處理嗎？</p>
+    <p class="a">不行。緊急或工安相關的狀況，請直接找老闆或工地主任，不要透過機器人。</p>
+  </div>
+
+  <h2>成品可以拿來做什麼／不能做什麼</h2>
+  <div class="examples">
+    <div class="ex-good">
+      <div class="outcome-title" style="color:var(--primary-strong);">可以拿來做什麼</div>
+      <ol>
+        <li>快速看懂這個案子的空間格局、動線</li>
+        <li>跟老闆、師傅內部討論時當參考</li>
+        <li>當作抓大致尺寸的起點</li>
+      </ol>
+    </div>
+    <div class="ex-bad">
+      <div class="outcome-title" style="color:var(--danger);">不能拿來做什麼</div>
+      <ol>
+        <li>禁入報價與施工圖——不能拿去算料、算價</li>
+        <li>不能當成現場實測依據，比例只依 CAD 圖層換算</li>
+        <li>沒有門扇窗框、沒有家具，不是完整裝修模型</li>
+        <li>未經老闆核可，不得交付給客戶</li>
+      </ol>
+    </div>
+  </div>
+
+  <footer>如菓室內裝修・內部文件，請勿外傳｜返回 <a href="index.html">使用指南首頁</a>｜v1 2026-09-23</footer>
+
+</div>
+</body>
+</html>
