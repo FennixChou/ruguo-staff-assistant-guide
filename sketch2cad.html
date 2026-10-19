@@ -1,0 +1,578 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>手稿轉 CAD 操作手冊</title>
+<style>
+  :root {
+    --bg: #F2ECDF;
+    --surface: #FCFAF4;
+    --surface-2: #F7F1E6;
+    --ink: #22271F;
+    --muted: #62665A;
+    --line: #E4DCCB;
+    --primary: #34573B;
+    --primary-strong: #274430;
+    --primary-soft: rgba(52,87,59,.10);
+    --primary-line: rgba(52,87,59,.30);
+    --clay: #8F6234;
+    --warn: #96611B;
+    --danger: #AF4636;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #15170F;
+      --surface: #1E2016;
+      --surface-2: #24271B;
+      --ink: #ECE9DE;
+      --muted: #9D9B88;
+      --line: #2F3123;
+      --primary: #9BC084;
+      --primary-strong: #B4D49E;
+      --primary-soft: rgba(155,192,132,.14);
+      --primary-line: rgba(155,192,132,.38);
+      --clay: #CB9C6E;
+      --warn: #E0AC5B;
+      --danger: #E0806F;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #15170F; --surface: #1E2016; --surface-2: #24271B; --ink: #ECE9DE;
+    --muted: #9D9B88; --line: #2F3123; --primary: #9BC084; --primary-strong: #B4D49E;
+    --primary-soft: rgba(155,192,132,.14); --primary-line: rgba(155,192,132,.38);
+    --clay: #CB9C6E; --warn: #E0AC5B; --danger: #E0806F;
+  }
+  :root[data-theme="light"] {
+    --bg: #F2ECDF; --surface: #FCFAF4; --surface-2: #F7F1E6; --ink: #22271F;
+    --muted: #62665A; --line: #E4DCCB; --primary: #34573B; --primary-strong: #274430;
+    --primary-soft: rgba(52,87,59,.10); --primary-line: rgba(52,87,59,.30);
+    --clay: #8F6234; --warn: #96611B; --danger: #AF4636;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Segoe UI","Microsoft JhengHei","PingFang TC","Noto Sans TC",system-ui,sans-serif;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--primary); }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 44px 22px; }
+  header.hero {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 22px 24px;
+    margin-bottom: 24px;
+  }
+  .kicker {
+    display: inline-block;
+    font-size: .76rem;
+    letter-spacing: .05em;
+    color: var(--primary);
+    background: var(--primary-soft);
+    border: 1px solid var(--primary-line);
+    border-radius: 999px;
+    padding: 3px 12px;
+    margin-bottom: 10px;
+  }
+  h1 { font-size: 1.55rem; font-weight: 600; margin: 0 0 8px; color: var(--ink); }
+  .lede { color: var(--muted); font-size: .95rem; margin: 0; }
+  h2 {
+    font-size: 1.15rem;
+    color: var(--primary);
+    margin: 34px 0 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--line);
+  }
+  h3 { font-size: 1rem; margin: 18px 0 8px; color: var(--ink); }
+  p { margin: 0 0 10px; }
+  .muted { color: var(--muted); font-size: .88rem; }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 14px;
+  }
+  .card h3 { margin-top: 0; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  @media (max-width: 720px) { .grid3 { grid-template-columns: 1fr; } }
+  .tag {
+    display: inline-block;
+    font-size: .76rem;
+    letter-spacing: .03em;
+    border-radius: 999px;
+    padding: 2px 10px;
+    margin-bottom: 10px;
+  }
+  .tag-a { color: var(--primary); background: var(--primary-soft); border: 1px solid var(--primary-line); }
+  .tag-b { color: var(--clay); background: rgba(143,98,52,.12); border: 1px solid rgba(143,98,52,.3); }
+  .tag-c { color: var(--warn); background: rgba(150,97,27,.12); border: 1px solid rgba(150,97,27,.3); }
+  ul { margin: 0; padding-left: 1.15em; }
+  li { margin-bottom: 6px; }
+  .examples { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 720px) { .examples { grid-template-columns: 1fr; } }
+  .ex-good, .ex-bad {
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    padding: 16px 18px;
+  }
+  .ex-good { background: var(--primary-soft); border-color: var(--primary-line); }
+  .ex-bad { background: rgba(175,70,54,.08); border-color: rgba(175,70,54,.28); }
+  .ex-title { font-weight: 600; margin-bottom: 10px; }
+  .ex-good .ex-title { color: var(--primary-strong); }
+  .ex-bad .ex-title { color: var(--danger); }
+  .ex-good ol, .ex-bad ol { padding-left: 1.3em; margin: 0; }
+  .ex-good li, .ex-bad li { margin-bottom: 8px; }
+  .boundary-box {
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--danger);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 14px;
+  }
+  .boundary-box li { margin-bottom: 8px; }
+  .callout {
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--warn);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-top: 14px;
+    font-size: .95rem;
+  }
+  .qa {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 10px;
+  }
+  .qa .q { font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+  .qa .a { color: var(--muted); margin: 0; }
+  footer {
+    margin-top: 34px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: .82rem;
+    text-align: center;
+  }
+
+  /* ---- 以下為本頁新增（沿用上方色彩 token，非 index.html 既有樣式） ---- */
+
+  .quickref ol { padding-left: 1.3em; margin: 0; }
+  .quickref li { margin-bottom: 8px; }
+  .quickref b { color: var(--primary-strong); }
+
+  .flow-wrap {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 18px 14px 10px;
+    margin-bottom: 14px;
+  }
+  .flow-wrap svg { display: block; width: 100%; max-width: 520px; height: auto; margin: 0 auto; }
+  .flow-caption { text-align: center; font-size: .8rem; color: var(--muted); margin: 4px 0 0; }
+
+  .prep-list li { margin-bottom: 10px; }
+
+  .step-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    margin-bottom: 16px;
+  }
+  .step-head { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+  .step-badge {
+    flex: 0 0 auto;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: var(--surface);
+    font-weight: 700;
+    font-size: .9rem;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .step-head h3 { margin: 0; font-size: 1.02rem; }
+  .step-sub-label {
+    display: block;
+    font-size: .76rem;
+    font-weight: 600;
+    letter-spacing: .04em;
+    color: var(--primary);
+    margin: 16px 0 6px;
+  }
+  .step-card ol { padding-left: 1.3em; }
+  .step-card ol li { margin-bottom: 8px; }
+  .step-note {
+    background: var(--surface-2);
+    border-left: 3px solid var(--warn);
+    border-radius: 0 8px 8px 0;
+    padding: 10px 14px;
+    font-size: .88rem;
+    color: var(--muted);
+  }
+
+  .screen {
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .screen-label {
+    font-size: .72rem;
+    letter-spacing: .05em;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  .bubble { max-width: 88%; border-radius: 14px; padding: 10px 14px; margin-bottom: 8px; font-size: .89rem; line-height: 1.6; }
+  .bubble-name { font-size: .72rem; color: var(--muted); margin-bottom: 3px; }
+  .bubble-me { margin-left: auto; background: var(--primary-soft); border: 1px solid var(--primary-line); color: var(--ink); border-bottom-right-radius: 4px; }
+  .bubble-bot { margin-right: auto; background: var(--surface); border: 1px solid var(--line); color: var(--ink); border-bottom-left-radius: 4px; }
+  .bubble-attach {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--surface); border: 1px dashed var(--line); border-radius: 8px;
+    padding: 4px 10px; font-size: .8rem; margin-top: 6px; color: var(--muted);
+  }
+  .bubble p { margin: 0; }
+
+  .tbl { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); margin-bottom: 14px; }
+  .tbl table { border-collapse: collapse; width: 100%; min-width: 620px; }
+  .tbl th { font-size: .76rem; letter-spacing: .04em; color: var(--muted); background: var(--surface-2); text-align: left; padding: 9px 12px; }
+  .tbl td { padding: 10px 12px; border-top: 1px solid var(--line); vertical-align: top; font-size: .89rem; }
+  .tbl td.msg { color: var(--ink); }
+
+  .outcome-title { font-weight: 600; margin-bottom: 10px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <span class="kicker">如菓工務助理・員工使用指南</span>
+    <h1>手稿轉 CAD：操作手冊</h1>
+    <p class="lede">給<strong>員工</strong>用：把現場<strong>手繪的丈量手稿</strong>（掃描 PDF 或手機拍的照片）丟給如菓工務助理，後台會幫你畫成一份<strong>CAD 平面草稿</strong>，連同「要回現場確認的數字清單」一起貼回來。全程在 Discord 完成。成品是<strong>草稿</strong>，不是施工圖，收到後一定要照清單回現場核對。</p>
+  </header>
+
+  <div class="card quickref">
+    <h3>60 秒速查</h3>
+    <ol>
+      <li>手稿拍清楚：紙放平、正上方拍、四角入鏡、數字對焦、<b>一頁拍一張</b></li>
+      <li>到<b>工務頻道</b>打字：<b>@如菓工務助理</b> ＋「手稿轉 CAD」＋<b>案名</b>，手稿當附件夾進同一則訊息</li>
+      <li>一張單<b>最多 5 頁</b>（PDF 頁數加照片張數合計），超過要分次丟</li>
+      <li>後台約需 <b>1–2.5 小時</b>，做好會自動貼回附件：<b>PDF、待確認 Excel、DWG／DXF 壓縮包</b>，另附一份<b>數量粗估表</b>（PDF＋Excel）</li>
+      <li>圖上<b>紅圈 Q</b> ＝要回現場確認的數字。<b>草稿・待核對・非施工圖</b>，不能放樣、不能當施工圖、不能直接報價；面積數量只能看「數量粗估表」（粗估・僅供參考）</li>
+    </ol>
+  </div>
+
+  <h2>這是什麼</h2>
+  <div class="card">
+    <p>你在工地現場用手畫、手寫量好的尺寸（丈量手稿），回公司還要自己重畫成 CAD，很花時間。這個功能讓後台先幫你畫出一份「分區的平面草稿」，你只要把它跟現場對一遍、改正有問題的地方，就能少花很多時間。</p>
+    <p class="muted">它畫出來的是「示意級」草稿：看得出格局和大概尺寸，但沒有經過現場驗證，所以一定要核對才能往下用。</p>
+  </div>
+
+  <h2>能做什麼、不能做什麼</h2>
+  <div class="examples">
+    <div class="ex-good">
+      <div class="outcome-title" style="color:var(--primary-strong);">能做</div>
+      <ol>
+        <li>把手稿畫成分區 CAD 平面草稿</li>
+        <li>把手稿裡看不清、對不上的數字列成「待確認清單」，讓你知道該回現場量哪裡</li>
+        <li>同時給你 PDF（看圖用）和 DWG／DXF（要繼續修改用）</li>
+        <li>附一份「數量粗估表」：地坪面積、周長、門窗數等，報價前估量用（見下面「數量粗估表」一節）</li>
+        <li>核對完之後，可以再接著轉成 3D（見下面「接著轉 3D」）</li>
+      </ol>
+    </div>
+    <div class="ex-bad">
+      <div class="outcome-title" style="color:var(--danger);">不能做</div>
+      <ol>
+        <li>不是施工圖，不能放樣、不能量圖取尺寸、不能直接拿去報價（面積和數量只能看附的「數量粗估表」，那是粗估）</li>
+        <li>手稿數字模糊或寫錯，它也可能跟著讀錯，所以才要你核對</li>
+        <li>不收 .dwg／.dxf：那已經是 CAD 了，要拉 3D 請改說「平面圖轉 3D」</li>
+        <li>不是丈量手稿的圖（例如已經做好的設計圖、現場照片）會被退回</li>
+      </ol>
+    </div>
+  </div>
+
+  <h2>交件前：手稿怎麼拍、怎麼寫</h2>
+  <div class="card">
+    <h3>拍照要領（四點）</h3>
+    <ul class="prep-list">
+      <li><strong>紙放平、正上方拍，四角都入鏡</strong>——斜著拍或裁掉一角，尺寸會歪</li>
+      <li><strong>白天自然光或開燈，避開陰影和反光</strong></li>
+      <li><strong>對焦在數字上，不要用數位變焦</strong>（想拍大一點請走近）</li>
+      <li><strong>一頁拍一張</strong></li>
+    </ul>
+    <h3>檔案要求</h3>
+    <ul class="prep-list">
+      <li>可傳格式：<strong>PDF、JPG、PNG、HEIC</strong>。iPhone 拍的 HEIC 照片可以直接傳，不用自己轉</li>
+      <li>照片請用<strong>手機原相機拍</strong>，不要截圖縮小——照片長邊至少要 1600 像素，太小的話手寫數字會被看錯</li>
+      <li>單張照片不超過 20 MB，單一 PDF 不超過 30 MB（太大請壓縮，或用 LINE 轉傳成較小的 JPG）</li>
+      <li>一張單最多 10 個檔、<strong>合計最多 5 頁</strong></li>
+      <li>不要把檔案亂改副檔名硬傳，檔案內容和副檔名對不上會被擋下來</li>
+    </ul>
+    <h3>手寫時的小提醒</h3>
+    <ul class="prep-list">
+      <li>數字寫清楚、寫大一點，這是它判讀最吃重的地方。手稿上的數字和圖形比例對不上時，後台會<strong>以手寫數字為準</strong>，再把差異列進待確認</li>
+      <li>手稿本來就沒標的東西（例如牆厚、哪邊是北），可以在訊息裡一起告訴助理，見下一節</li>
+    </ul>
+  </div>
+
+  <h2>怎麼下單</h2>
+
+  <div class="step-card">
+    <div class="step-head"><span class="step-badge">1</span><h3>到工務頻道，@ 助理並附上手稿</h3></div>
+
+    <span class="step-sub-label">你要做的</span>
+    <ol>
+      <li>打開 Discord，進到老闆開通給你的「工務頻道」</li>
+      <li>打一則訊息：先 @ 提到「如菓工務助理」（打 @ 再打「如菓」，從跳出的清單點選，名字變成藍底色塊才算數），然後說明需求，並<strong>一定要講案名</strong>（例如「王公館」）——案名會印在圖框上，沒給案名會被退回</li>
+      <li>把手稿當<strong>附件</strong>夾進同一則訊息（電腦：拖進輸入框，或按「＋」選「上傳檔案」；手機：點「＋」選「檔案」或相簿）</li>
+      <li>送出</li>
+    </ol>
+
+    <span class="step-sub-label">你可以順便補充的（沒有就不用講）</span>
+    <ul>
+      <li>樓層或區域，例如「1F 前棟」「2F 全層」</li>
+      <li>方位，例如「上方為北」（沒講的話圖上會標「方位未標」）</li>
+      <li>牆厚（公分）——手稿沒寫牆厚時，後台會自己推估，並把它列進待確認</li>
+      <li>圖框比例：預設 1:50（印出來圖比較大、好讀）；某區用 1:50 放不下圖框時，後台會自動改用 1:100，並在回貼訊息註明。也可以指定 1:100 或 1:150</li>
+      <li>其他提醒，例如「第 3 頁右下角是廁所」</li>
+    </ul>
+    <p class="muted">圖上單位固定是公分，不能改單位。</p>
+
+    <span class="step-sub-label">你會看到的（示意）</span>
+    <div class="screen">
+      <div class="screen-label">工務頻道・示意</div>
+      <div class="bubble bubble-me">
+        <div class="bubble-name">你</div>
+        <p>@如菓工務助理 手稿轉 CAD，案名：範例案A1，2F 全層，上方為北。</p>
+        <div class="bubble-attach">📎 手稿_第1頁.jpg</div>
+        <div class="bubble-attach">📎 手稿_第2頁.jpg</div>
+      </div>
+      <div class="bubble bubble-bot">
+        <div class="bubble-name">如菓工務助理</div>
+        <p>已收單轉後台，手稿轉 CAD 約 1–2.5 小時回貼（同時段只跑一張，前面有單會再晚一點）。</p>
+      </div>
+    </div>
+
+    <div class="step-note">注意：如果手稿超過 5 頁，請你先自己分成幾次、每次 5 頁內，各開一張單。直接丟超量的單會被退回。</div>
+  </div>
+
+  <h2>多久會回、會收到什麼</h2>
+  <div class="card">
+    <p><strong>時間：</strong>一張單約 <strong>1–2.5 小時</strong>。後台<strong>同一時間只做一張手稿單</strong>，前面有人在做的話，你的單會排在後面，等的時間會更長；你不用重丟，也不用一直盯著頻道。</p>
+    <p><strong>收到三個主要附件，外加一份數量粗估表：</strong></p>
+    <ul>
+      <li><strong>合併 PDF</strong>：各區平面圖合在一起，方便直接看。<strong>每一頁都有「草稿・待核對・非施工圖」浮水印</strong></li>
+      <li><strong>待確認 Excel</strong>：各區的紅圈 Q，加上共通問題（牆厚、走廊寬、方位、門寬等）整理成一張表</li>
+      <li><strong>DWG／DXF 壓縮包</strong>：各區的 CAD 檔，要修改或接著做 3D 用這個（壓縮包裡有一份對照表，說明每個檔對應哪個區）</li>
+      <li><strong>數量粗估表（PDF＋Excel）</strong>：各空間的面積、周長、門窗數量，每頁都印「粗估・僅供參考」。怎麼看、能不能信，見下一節</li>
+    </ul>
+    <p class="muted">正常情況共 5 個附件。粗估表若算不出來，不會卡住整張單，只會先貼回前面三個主要附件，訊息的附件清單裡就不會出現數量粗估表；需要時請問老闆。</p>
+    <p class="muted">檔名只會出現英文和數字（中文案名會被拿掉；案名全是中文時，檔名會用「sk＋一串編號」代替），這是正常現象。單一附件超過 25 MB 時不會直接貼出，訊息會註明，請找老闆轉交。</p>
+
+    <span class="step-sub-label" style="margin-top:14px;">你會看到的（示意）</span>
+    <div class="screen">
+      <div class="screen-label">工務頻道・示意</div>
+      <div class="bubble bubble-bot">
+        <div class="bubble-name">如菓工務助理</div>
+        <p>草稿・待核對・非施工圖</p>
+        <p>範例案A1 手稿轉 CAD 完成：2 區、2 頁手稿｜待確認 Q 12 條（共通問題 4 項）。</p>
+        <p>圖上紅圈 Q＝要回現場確認的數字；本圖為示意級，不能放樣。附數量粗估表＝粗估・僅供參考，不可當施工圖、下單尺寸或直接對客報價；沒封閉的走廊等空間不會列在表上，表上沒列到的空間請自己量。</p>
+        <p>附件：合併 PDF（AutoCAD 出圖版）、待確認 Excel、各區 DWG/DXF 壓縮包、數量粗估表（PDF＋Excel）。</p>
+        <p>草稿・待核對・非施工圖</p>
+      </div>
+    </div>
+    <p class="muted">上面的區數、條數只是示意，實際依你的手稿而定。</p>
+  </div>
+
+  <h2>數量粗估表：可以算、不可以算</h2>
+  <div class="card">
+    <p>每張單都會多附一份<strong>數量粗估表</strong>（PDF＋Excel），把圖上量得出來的數字先幫你整理好。每一頁都印<strong>「粗估・僅供參考」</strong>。簡單說：<strong>光看平面圖算得出來的才有，看不到的它不會亂猜。</strong></p>
+  </div>
+  <div class="examples">
+    <div class="ex-good">
+      <div class="outcome-title" style="color:var(--primary-strong);">可以算（光看平面）</div>
+      <ul>
+        <li><strong>各空間地坪面積</strong>（平方公尺和坪）：估地板、磁磚、保護板用</li>
+        <li><strong>平釘天花</strong>：面積大約等於地坪面積</li>
+        <li><strong>周長</strong>（門口的寬度已扣掉）：估踢腳板、天花線板用</li>
+        <li><strong>門窗數量和寬度</strong></li>
+        <li><strong>牆體總長、柱子數量</strong>：牆長含外牆，是抓牆中心線的粗估；牆線被門窗切斷、算不出來時會寫「需人工量」</li>
+        <li><strong>牆面面積</strong>：只有手稿上<strong>有寫天花高度</strong>才算，而且<strong>沒有扣窗戶</strong>。沒寫天花高度的，表上會顯示「需天花高度」</li>
+      </ul>
+    </div>
+    <div class="ex-bad">
+      <div class="outcome-title" style="color:var(--danger);">不可以算</div>
+      <ul>
+        <li><strong>系統櫃、木作</strong></li>
+        <li><strong>水電點位和管線</strong></li>
+        <li><strong>拆除量</strong></li>
+        <li><strong>窗戶高度和訂製尺寸</strong>：要到現場複尺</li>
+        <li><strong>造型天花</strong></li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>一定要知道的限制</h3>
+  <div class="boundary-box">
+    <ul>
+      <li><strong>數字準不準，看手稿準不準。</strong>圖上有紅圈 Q 的地方，那裡的數量也一樣待確認；表上不會逐列標出 Q，要自己對照待確認 Excel。門、窗、柱寫 0 不代表現場沒有，可能是手稿沒標、圖上沒畫（會列在 Q 裡）</li>
+      <li><strong>表上都是淨數量，沒有加損耗，也不是叫料數量。</strong>真的要叫料，先回現場複尺；損耗多少請問主管或報價人員，不要自己抓</li>
+      <li><strong>開放空間會被算成一間。</strong>例如客廳和餐廳中間沒有牆，表上就是一個空間</li>
+      <li><strong>四周沒有被牆、門、窗圍起來的空間，表上不會列。</strong>例如一端開口的走廊，這種要自己量。表上若寫「無法自動判讀，需人工量」，也是一樣自己量</li>
+      <li><strong>斜牆照算；弧形牆是近似值</strong>，只能當參考</li>
+      <li><strong>少數門窗可能分不到空間。</strong>這種門窗只算進該區的合計，表上會註明「未歸屬門」或「未歸屬窗」幾樘，所以各空間的門窗加起來可能比合計少</li>
+    </ul>
+    <div class="callout"><strong>用途紅線：</strong>只能當<strong>報價前的粗估、內部參考</strong>。<strong>不可以當施工圖、不可以當下單尺寸、不可以直接給客戶當報價依據。</strong>要用在正式的地方，請先回現場核對，再問主管或老闆。</div>
+  </div>
+
+  <h2>收到後一定要做的核對</h2>
+  <div class="boundary-box">
+    <ul>
+      <li><strong>它是草稿，不是施工圖。</strong>圖不能放樣、不能直接拿去報價，也不要量圖取尺寸；要估面積數量，請看附的數量粗估表，而且它同樣要先核對</li>
+      <li><strong>打開待確認 Excel，一條一條對。</strong>每個紅圈 Q 都是後台看不清、或和比例對不上的數字，要回現場重量或對照原手稿確認</li>
+      <li><strong>共通問題先看。</strong>牆厚、走廊寬、方位、門寬這幾項影響整張圖，先確認這些</li>
+      <li><strong>對照手稿檢查有沒有畫錯。</strong>特別看有沒有讀錯的數字、少畫的柱子或牆、多畫的牆</li>
+      <li><strong>留意比例有沒有被改。</strong>如果某區用原比例放不下圖框，後台會自動改用較小的比例（例如 1:50 改 1:100），訊息裡會寫「比例改為 1:XXX（原單 1:XXX）」，或只有部分分區改用時寫「P-02、P-03 改用 1:100，其餘維持 1:50」，實際比例以 PDF 圖框標示為準</li>
+      <li>核對完、改正完，再往下用（給老闆看、或接著轉 3D）</li>
+    </ul>
+    <div class="callout">CAD 圖框本身不會印「草稿」字樣，標題欄寫的是「示意級、不可量圖取尺寸」；「草稿・待核對・非施工圖」印在 PDF 浮水印和助理的訊息裡。</div>
+  </div>
+
+  <h2>被退件的常見原因</h2>
+  <p class="muted">被退件不是壞掉，是助理照規則誠實告訴你哪裡不行。收件時就擋下的，訊息開頭是「📐 手稿轉 CAD 收單沒過：」；後台開始畫之後才發現的（表格後面幾列），訊息開頭是「草稿・待核對・非施工圖」。照下表處理再傳一次就好。手機請左右滑動看完整表格。</p>
+  <div class="tbl">
+    <table>
+      <tr><th>助理回什麼</th><th>代表什麼</th><th>你怎麼做</th></tr>
+      <tr>
+        <td class="msg">「這張單沒收到手稿檔，請把丈量手稿（PDF 或照片）重新傳一次。」</td>
+        <td>忘了附檔，或上傳失敗</td>
+        <td>手稿重新傳一次</td>
+      </tr>
+      <tr>
+        <td class="msg">「請補案名（圖框要用），例如「王公館」。」</td>
+        <td>訊息裡沒講案名</td>
+        <td>補一句案名再傳</td>
+      </tr>
+      <tr>
+        <td class="msg">「只收 PDF／JPG／PNG／HEIC 手稿。」</td>
+        <td>附的檔案格式不收</td>
+        <td>改附 PDF 或照片。如果附的是 .dwg／.dxf，助理會提示你「已經是 CAD 了，要拉 3D 請說平面圖轉 3D」</td>
+      </tr>
+      <tr>
+        <td class="msg">「這次共 N 頁，後台一張單最多 5 頁。請分成幾次丟（每次 5 頁內），或跟老闆說要整批處理。」</td>
+        <td>手稿超過 5 頁（老闆也會同步收到通知）</td>
+        <td>分成幾批、每批 5 頁以內，各開一張單；或直接跟老闆說要整批處理</td>
+      </tr>
+      <tr>
+        <td class="msg">「這次共 N 個檔，後台一張單最多 10 個檔。」</td>
+        <td>檔案數超過 10 個</td>
+        <td>分次丟</td>
+      </tr>
+      <tr>
+        <td class="msg">「照片超過 20 MB」或「PDF 超過 30 MB」</td>
+        <td>檔案太大</td>
+        <td>壓縮，或用 LINE 轉傳成較小的 JPG 再丟；PDF 太大就分頁後再傳</td>
+      </tr>
+      <tr>
+        <td class="msg">「照片解析度太低……手寫數字會看錯。」</td>
+        <td>照片長邊不到 1600 像素（常見於截圖或被縮小的圖）</td>
+        <td>用手機原相機重拍，不要截圖縮小</td>
+      </tr>
+      <tr>
+        <td class="msg">「iPhone 照片……後台轉檔失敗。」</td>
+        <td>HEIC 照片轉不開</td>
+        <td>到 設定 → 相機 → 格式，改成「最相容」再拍；或用截圖、LINE 轉傳成 JPG 再丟</td>
+      </tr>
+      <tr>
+        <td class="msg">「檔案……打不開（可能壞掉或有密碼）」或「有檔案的內容跟副檔名對不上」</td>
+        <td>檔案壞掉、有密碼，或被改過副檔名</td>
+        <td>重新傳原始檔</td>
+      </tr>
+      <tr>
+        <td class="msg">「手稿第 N 頁看不清楚（模糊／反光／有陰影），數字可能判錯。」</td>
+        <td>後台判讀時發現整份拍照品質不佳（模糊、反光、陰影、斜拍）</td>
+        <td>照拍照四點要領重拍後再丟一次（只有一部分頁面看不清時不會退件：看得清的照畫，看不清的會列進待確認）</td>
+      </tr>
+      <tr>
+        <td class="msg">「這份看起來不是現場丈量手稿（像是完成的設計圖／現場照片）。」</td>
+        <td>丟的不是手繪丈量稿</td>
+        <td>已經是 CAD 出圖的 PDF，請直接跟老闆要 DWG；要做 3D 請走「平面圖轉 3D」</td>
+      </tr>
+      <tr>
+        <td class="msg">「後台處理這張手稿時出了狀況，已轉老闆處理。」（或「後台出圖驗證沒過」「後台啟動失敗」，後面都接「已轉老闆處理」）</td>
+        <td>後台出錯，不是你的手稿有問題；老闆已收到通知</td>
+        <td>不用重丟，等老闆處理或直接問老闆</td>
+      </tr>
+      <tr>
+        <td class="msg">（助理回「已收單」後超過 3 小時，頻道一直沒有任何回貼）</td>
+        <td>可能前面還有手稿單在排隊，也可能後台卡住</td>
+        <td>直接問老闆，不用一直重丟</td>
+      </tr>
+    </table>
+  </div>
+
+  <h2>接著轉 3D</h2>
+  <div class="card">
+    <p>想把某一區拉成 3D 看空間感？照這個順序：</p>
+    <ol>
+      <li><strong>先回現場核對</strong>：照待確認清單把紅圈 Q 的數字確認完。手稿讀錯的數字，會直接變成 3D 牆的位置，不核對就拉 3D，結果會是錯的</li>
+      <li>把要拉的那一區的 <strong>.dwg</strong>（從回貼的壓縮包取，或設計師改好的版本）<strong>重新上傳</strong>到工務頻道，@ 助理說「<strong>平面圖轉 3D，這是手稿轉 CAD 回貼的圖</strong>」並講案名</li>
+      <li><strong>一區一張單</strong>。講明是手稿轉 CAD 的圖，助理就會帶對應的圖層與單位設定，你不用自己設</li>
+    </ol>
+    <p class="muted">3D 的詳細操作與限制，請看 <a href="floorplan3d.html">平面圖轉 3D 操作手冊</a>。如果你問助理「這張可以拉 3D 嗎」而還沒核對，它會先提醒你核對，你堅持的話才會幫你送單。</p>
+  </div>
+
+  <h2>常見問題</h2>
+
+  <div class="qa">
+    <p class="q">Q1：我拿到的就是掃描檔 PDF，可以直接丟嗎？</p>
+    <p class="a">可以。PDF、JPG、PNG、HEIC 都收，不用先轉格式。記得一張單合計最多 5 頁。</p>
+  </div>
+  <div class="qa">
+    <p class="q">Q2：我有十幾頁手稿怎麼辦？</p>
+    <p class="a">自己分批，每批 5 頁以內，各開一張單；也可以跟老闆說要整批處理。注意後台同一時間只做一張，多張單要排隊，所以總共會等比較久。</p>
+  </div>
+  <div class="qa">
+    <p class="q">Q3：一定要講案名嗎？</p>
+    <p class="a">要。案名會印在圖框上，沒給會被退回請你補。</p>
+  </div>
+  <div class="qa">
+    <p class="q">Q4：圖上的紅圈 Q 是什麼？</p>
+    <p class="a">是後台判讀手稿時看不清、或數字和比例推算對不上的地方，要你回現場確認。同樣的內容也整理在待確認 Excel 裡。</p>
+  </div>
+  <div class="qa">
+    <p class="q">Q5：手稿上的數字和圖形比例對不上時，它聽誰的？</p>
+    <p class="a">聽手寫的數字。它照手稿數字畫，並在該區的待確認裡寫上「手稿值是多少、依比例推算約多少，請現場確認」。</p>
+  </div>
+  <div class="qa">
+    <p class="q">Q6：為什麼 CAD 圖框上沒有「草稿」兩個字？</p>
+    <p class="a">草稿標示放在助理的訊息和 PDF 浮水印上，CAD 檔的圖框維持公司原本的標題欄，寫的是「示意級、不可量圖取尺寸」。意思一樣：這是草稿，不能拿來量尺寸。</p>
+  </div>
+  <div class="qa">
+    <p class="q">Q7：超過 3 個小時還沒收到回貼，怎麼辦？</p>
+    <p class="a">直接問老闆，不用一直重丟。可能是前面還有手稿單在排隊，也可能是後台卡住。如果後台出錯，助理通常會回「已轉老闆處理」，那就等老闆處理即可。</p>
+  </div>
+  <div class="qa">
+    <p class="q">Q8：可以拿它畫的圖給客戶或報價嗎？</p>
+    <p class="a">不行。這是示意級草稿，不能放樣、不能當施工圖，數量粗估表也不能直接當報價依據。要給客戶看之前，請先經過現場核對，並先問老闆。</p>
+  </div>
+
+  <div class="qa">
+    <p class="q">Q9：數量粗估表可以拿去叫料或報價給客戶嗎？</p>
+    <p class="a">不行。它只是報價前的內部粗估，都是淨數量，不含損耗，也不是下單尺寸。叫料請回現場複尺，損耗多少問主管或報價人員。</p>
+  </div>
+
+  <footer>如菓室內裝修・內部文件，請勿外傳｜返回 <a href="index.html">使用指南首頁</a>｜<a href="floorplan3d.html">平面圖轉 3D 操作手冊</a>｜v1.0 2026-10-19</footer>
+
+</div>
+</body>
+</html>
